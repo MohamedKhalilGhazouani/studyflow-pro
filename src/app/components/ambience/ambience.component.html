@@ -1,0 +1,38 @@
+<div class="ambience-card">
+  <div class="ambience-header">
+    <h2><i class="bi bi-soundwave"></i> Ambience</h2>
+    @if (active() !== 'none') {
+      <button class="play-toggle" (click)="togglePlay()">
+        <i [class]="isPlaying() ? 'bi bi-pause-fill' : 'bi bi-play-fill'"></i>
+      </button>
+    }
+  </div>
+
+  <div class="sound-grid">
+    @for (opt of options; track opt.id) {
+      <button
+        class="sound-btn"
+        [class.active]="active() === opt.id"
+        (click)="select(opt.id)"
+      >
+        <i [class]="'bi ' + opt.icon"></i>
+        <span>{{ opt.label }}</span>
+      </button>
+    }
+  </div>
+
+  @if (active() !== 'none') {
+    <div class="volume-row">
+      <i class="bi bi-volume-down"></i>
+      <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.05"
+        [value]="volume()"
+        (input)="setVolume(+$any($event.target).value)"
+      />
+      <i class="bi bi-volume-up"></i>
+    </div>
+  }
+</div>

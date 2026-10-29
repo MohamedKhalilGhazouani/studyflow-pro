@@ -1,0 +1,63 @@
+<div class="calendar-card">
+  <div class="cal-header">
+    <div class="cal-title">
+      <i class="bi bi-calendar3"></i>
+      <h2>{{ monthLabel() }}</h2>
+    </div>
+    <div class="cal-nav">
+      <button (click)="goToday()" class="today-btn" title="Go to today">Today</button>
+      <button (click)="prevMonth()" class="nav-btn"><i class="bi bi-chevron-left"></i></button>
+      <button (click)="nextMonth()" class="nav-btn"><i class="bi bi-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <div class="weekdays">
+    @for (w of weekDays; track w) {
+      <div class="weekday">{{ w }}</div>
+    }
+  </div>
+
+  <div class="days-grid">
+    @for (cell of days(); track cell.date) {
+      <button
+        class="day-cell"
+        [class.other-month]="!cell.inMonth"
+        [class.today]="cell.isToday"
+        [class.selected]="cell.isSelected"
+        [class.has-tasks]="countFor(cell.date).total > 0"
+        (click)="select(cell.date)"
+      >
+        <span class="day-num">{{ cell.day }}</span>
+        @if (countFor(cell.date).total > 0) {
+          <div class="dots">
+            @for (dot of dotsFor(cell.date); track $index) {
+              <span class="dot" [class.done]="dot"></span>
+            }
+          </div>
+        }
+      </button>
+    }
+  </div>
+
+  <!-- Day history panel -->
+  <div class="day-history">
+    <div class="history-title">
+      <i class="bi bi-bookmark-fill"></i>
+      <strong>{{ todo.selectedDate() | date:'fullDate' }}</strong>
+    </div>
+    <div class="history-stats">
+      <div class="h-stat">
+        <i class="bi bi-bullseye"></i>
+        <span>{{ selectedDayStats().focusMin }} min focused</span>
+      </div>
+      <div class="h-stat">
+        <i class="bi bi-lightning-charge"></i>
+        <span>{{ selectedDayStats().sessions }} sessions</span>
+      </div>
+      <div class="h-stat">
+        <i class="bi bi-check2-all"></i>
+        <span>{{ selectedDayStats().tasks.done }}/{{ selectedDayStats().tasks.total }} tasks</span>
+      </div>
+    </div>
+  </div>
+</div>

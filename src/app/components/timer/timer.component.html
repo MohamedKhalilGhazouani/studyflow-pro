@@ -1,0 +1,73 @@
+<div class="timer-card" [class.session-ended]="timer.sessionJustEnded()">
+  <div class="timer-header">
+    <div class="mode-tabs">
+      @for (m of modes; track m.key) {
+        <button
+          class="mode-btn"
+          [class.active]="timer.mode() === m.key"
+          (click)="selectMode(m.key)"
+        >
+          <i [class]="'bi ' + m.icon"></i>
+          <span>{{ m.label }}</span>
+        </button>
+      }
+    </div>
+    <button class="settings-btn" (click)="toggleSettings()" title="Settings">
+      <i class="bi bi-gear"></i>
+    </button>
+  </div>
+
+  @if (showSettings) {
+    <div class="settings-panel">
+      <div class="setting-row">
+        <label>Focus (min)</label>
+        <input type="number" [ngModel]="timer.settings().focusMinutes"
+               (ngModelChange)="updateFocus($event)" min="1" max="90">
+      </div>
+      <div class="setting-row">
+        <label>Short Break</label>
+        <input type="number" [ngModel]="timer.settings().shortBreakMinutes"
+               (ngModelChange)="updateShort($event)" min="1" max="30">
+      </div>
+      <div class="setting-row">
+        <label>Long Break</label>
+        <input type="number" [ngModel]="timer.settings().longBreakMinutes"
+               (ngModelChange)="updateLong($event)" min="5" max="60">
+      </div>
+    </div>
+  }
+
+  <div class="timer-display">
+    <div class="progress-ring">
+      <svg viewBox="0 0 120 120">
+        <circle class="bg" cx="60" cy="60" r="54" />
+        <circle
+          class="progress"
+          cx="60" cy="60" r="54"
+          [style.strokeDashoffset]="339.292 - (339.292 * timer.progress() / 100)"
+        />
+      </svg>
+      <div class="time">{{ timer.displayTime() }}</div>
+    </div>
+  </div>
+
+  <div class="timer-controls">
+    @if (!timer.isRunning()) {
+      <button class="btn-primary" (click)="timer.start()">
+        <i class="bi bi-play-fill"></i> Start
+      </button>
+    } @else {
+      <button class="btn-secondary" (click)="timer.pause()">
+        <i class="bi bi-pause-fill"></i> Pause
+      </button>
+    }
+    <button class="btn-ghost" (click)="timer.reset()">
+      <i class="bi bi-arrow-counterclockwise"></i> Reset
+    </button>
+  </div>
+
+  <div class="session-info">
+    <span><i class="bi bi-check-circle"></i> {{ timer.completedSessions() }} sessions today</span>
+    <span><i class="bi bi-clock-history"></i> {{ timer.totalFocusToday() }} min focused</span>
+  </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="todo-card">
+  <div class="todo-header">
+    <h2>
+      <i class="bi bi-list-check"></i>
+      Tasks
+      <span class="day-chip">{{ todo.selectedDate() | date:'MMM d' }}</span>
+    </h2>
+    <div class="counts">
+      <span class="badge pending">
+        <i class="bi bi-circle"></i> {{ todo.pendingCount() }}
+      </span>
+      <span class="badge done">
+        <i class="bi bi-check-circle"></i> {{ todo.completedCount() }}
+      </span>
+    </div>
+  </div>
+
+  <div class="add-task">
+    <input
+      type="text"
+      placeholder="Add task or exercise for this day..."
+      [(ngModel)]="newTaskTitle"
+      (keydown)="onKeydown($event)"
+      maxlength="120"
+    />
+    <select [(ngModel)]="newPriority" class="priority-select">
+      <option value="low">🟢 Low</option>
+      <option value="medium">🟡 Med</option>
+      <option value="high">🔴 High</option>
+    </select>
+    <button class="btn-icon" (click)="showDeadline = !showDeadline" [class.active]="showDeadline" title="Set deadline">
+      <i class="bi bi-calendar-event"></i>
+    </button>
+    <button class="btn-add" (click)="addTask()" [disabled]="!newTaskTitle.trim()">
+      <i class="bi bi-plus-lg"></i>
+    </button>
+  </div>
+
+  @if (showDeadline) {
+    <div class="deadline-row">
+      <label>
+        <i class="bi bi-alarm"></i> Deadline
+        <input type="date" [(ngModel)]="newDeadline" />
+      </label>
+      <label>
+        Remind me
+        <select [(ngModel)]="remindDays">
+          <option [ngValue]="1">1 day before</option>
+          <option [ngValue]="2">2 days before</option>
+          <option [ngValue]="3">3 days before</option>
+          <option [ngValue]="5">5 days before</option>
+          <option [ngValue]="7">7 days before</option>
+        </select>
+      </label>
+    </div>
+  }
+
+  <div class="filters">
+    <button [class.active]="filter() === 'all'" (click)="filter.set('all')">
+      <i class="bi bi-list-ul"></i> All
+    </button>
+    <button [class.active]="filter() === 'pending'" (click)="filter.set('pending')">
+      <i class="bi bi-hourglass-split"></i> Pending
+    </button>
+    <button [class.active]="filter() === 'done'" (click)="filter.set('done')">
+      <i class="bi bi-check2-all"></i> Done
+    </button>
+  </div>
+
+  <ul class="task-list">
+    @for (task of visibleTasks; track task.id) {
+      <li class="task-item" [class.completed]="task.completed">
+        <button class="check-btn" (click)="todo.toggleTask(task.id)">
+          @if (task.completed) {
+            <i class="bi bi-check-circle-fill"></i>
+          } @else {
+            <i class="bi bi-circle"></i>
+          }
+        </button>
+        <div class="task-body">
+          <span class="task-title">{{ task.title }}</span>
+          @if (task.deadline) {
+            <span class="deadline-badge" [class.urgent]="daysUntil(task.deadline) === 'Today' || daysUntil(task.deadline) === 'Tomorrow' || daysUntil(task.deadline) === 'Overdue'">
+              <i class="bi bi-alarm"></i> {{ daysUntil(task.deadline) }}
+            </span>
+          }
+        </div>
+        <i [class]="'bi ' + priorityIcon(task.priority) + ' ' + priorityClass(task.priority)"></i>
+        <button class="delete-btn" (click)="todo.deleteTask(task.id)" title="Delete">
+          <i class="bi bi-trash3"></i>
+        </button>
+      </li>
+    } @empty {
+      <li class="empty-state">
+        <i class="bi bi-calendar-plus"></i>
+        <p>No tasks for this day.<br>Add one above!</p>
+      </li>
+    }
+  </ul>
+
+  @if (todo.completedCount() > 0) {
+    <button class="clear-btn" (click)="todo.clearCompleted()">
+      <i class="bi bi-trash"></i> Clear completed
+    </button>
+  }
+</div>

@@ -1,0 +1,215 @@
+.timer-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.timer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.mode-tabs {
+  display: flex;
+  gap: 0.35rem;
+  background: var(--surface);
+  padding: 0.3rem;
+  border-radius: 12px;
+}
+
+.mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: var(--text);
+  }
+
+  &.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(88, 129, 87, 0.35);
+  }
+
+  i { font-size: 0.95rem; }
+}
+
+.settings-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+}
+
+.settings-panel {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  input {
+    width: 70px;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card-bg);
+    color: var(--text);
+    text-align: center;
+    font-weight: 600;
+  }
+}
+
+.timer-display {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.progress-ring {
+  position: relative;
+  width: 200px;
+  height: 200px;
+
+  svg {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+  }
+
+  .bg {
+    fill: none;
+    stroke: var(--surface);
+    stroke-width: 7;
+  }
+
+  .progress {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-dasharray: 339.292;
+    transition: stroke-dashoffset 0.3s ease;
+  }
+
+  .time {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.75rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+}
+
+.timer-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.btn-primary, .btn-secondary, .btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 14px rgba(88, 129, 87, 0.35);
+
+  &:hover { background: var(--primary-dark); transform: translateY(-1px); }
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+
+  &:hover { border-color: var(--primary); color: var(--primary); }
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+
+  &:hover { color: var(--text); }
+}
+
+.session-info {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mode-btn span { display: none; }
+  .progress-ring { width: 170px; height: 170px; }
+  .progress-ring .time { font-size: 2.2rem; }
+}
+
+.timer-card.session-ended {
+  animation: pulse-end 0.6s ease 3;
+  box-shadow: 0 0 0 3px var(--primary), 0 4px 24px rgba(88, 129, 87, 0.25);
+}
+
+@keyframes pulse-end {
+  0%, 100% { box-shadow: 0 0 0 3px var(--primary), 0 4px 24px rgba(88, 129, 87, 0.25); }
+  50% { box-shadow: 0 0 0 8px rgba(88, 129, 87, 0.2), 0 4px 24px rgba(88, 129, 87, 0.15); }
+}
